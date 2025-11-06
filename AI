@@ -1,0 +1,16 @@
+#!/bin/bash
+clear; echo -e "\033[32m AI Agents CLI Tools in Linux Environment\033[0m"
+echo "1) Claude Code   2) Codex (GPT)   3) Gemini 2.5   4) Qwen Coder"
+echo "5) Groq (Llama3) 6) Ollama (local) 7) Cursor Tools 8) Exit"
+read -p "Choose: " n
+case $n in
+1) npx claude ;;
+2) ./node_modules/.bin/codex ;;
+3) ./node_modules/.bin/gemini ;;
+4) ./node_modules/.bin/qwen ;;
+5) ./node_modules/.bin/groq chat ;;
+6) ./node_modules/.bin/ollama run llama3.2 2>/dev/null || echo "Ollama requires local setup" ;;
+7) ./node_modules/.bin/cursor-tools ;;
+8) echo "Goodbye!"; exit 0 ;;
+*) echo "Try again"; exec "$0" ;;
+esac
