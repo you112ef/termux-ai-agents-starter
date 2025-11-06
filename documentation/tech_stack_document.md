@@ -1,90 +1,96 @@
-# Tech Stack Document
+# Tech Stack Document for termux-ai-agents-starter
 
-This document explains the key technologies chosen for the **codeguide-starter** project. It’s written in everyday language so anyone—technical or not—can understand why each tool was picked and how it supports the application.
+This document explains, in simple terms, the technology choices behind the **termux-ai-agents-starter** project. It is meant to help everyone—from business users to new developers—understand why we picked each tool and how they work together.
 
-## 1. Frontend Technologies
-The frontend is everything the user sees and interacts with. For this project, we’ve used:
+## Frontend Technologies
 
-- **Next.js (App Router)**
-  - A React framework that makes page routing, server-side rendering, and API routes very simple.
-  - Enhances user experience by pre-rendering pages on the server or at build time, leading to faster initial load.
-- **React 18**
-  - The underlying library for building user interfaces with reusable components.
-  - Provides a smooth, interactive experience thanks to its virtual DOM and modern hooks.
-- **TypeScript**
-  - A superset of JavaScript that adds types (labels for data).
-  - Helps catch errors early during development and makes the code easier to maintain.
-- **CSS (globals.css & theme.css)**
-  - **globals.css** applies base styles (fonts, colors, resets) across the entire app.
-  - **dashboard/theme.css** defines the look and feel specific to the dashboard area.
-  - This separation keeps styles organized and avoids accidental style conflicts.
+These are the tools and libraries that shape what you see and interact with in the browser.
 
-By combining these tools, we have a clear structure (Next.js folders for pages and layouts), safer code (TypeScript), and flexible styling with vanilla CSS.
+- **Next.js (App Router) & React 19**  
+  A popular framework (Next.js) built on top of React makes it easy to create pages and handle navigation. It also supports server-side rendering, which can make pages load faster.
 
-## 2. Backend Technologies
-The backend handles data, user accounts, and the logic behind the scenes. Our choices here are:
+- **TypeScript**  
+  A version of JavaScript that checks your code for mistakes before you run it. This reduces bugs and gives clearer guidance to developers (and even AI helpers).
 
-- **Next.js API Routes**
-  - Allows us to write server-side code (`route.ts` files) alongside our frontend in the same project.
-  - Runs on Node.js, so we can handle requests like sign-up, sign-in, and data fetching in one place.
-- **Node.js Runtime**
-  - The JavaScript environment on the server that executes our API routes.
-- **bcrypt** (npm package)
-  - A library for hashing passwords securely before storing them.
-  - Ensures that even if someone got access to our data, raw passwords aren’t visible.
-- **(Optional) NextAuth.js or JWT**
-  - While this starter kit shows a custom authentication flow, it can easily integrate services like NextAuth.js for email-based login or JWT (JSON Web Tokens) for stateless sessions.
+- **Tailwind CSS v4**  
+  A utility-first style framework. Instead of writing custom CSS for each component, you add tiny style classes right in your HTML. This speeds up design changes.
 
-These components work together to receive user credentials, verify or store them securely, manage sessions or tokens, and deliver protected data back to the frontend.
+- **shadcn/ui**  
+  A set of ready-made, accessible user interface components (buttons, forms, modals, etc.) that work with Tailwind. These pre-built pieces help you build a polished UI quickly.
 
-## 3. Infrastructure and Deployment
-Infrastructure covers where and how we host the app, as well as how changes get delivered:
+Together, these frontend choices ensure a smooth, responsive, and consistent user experience. They also make it simple for AI coding agents to follow clear patterns when generating or modifying UI code.
 
-- **Git & GitHub**
-  - Version control system (Git) and remote hosting (GitHub) keep track of all code changes and allow team collaboration.
-- **Vercel (or Netlify)**
-  - A popular hosting service optimized for Next.js, with one-click deployments and global content delivery.
-  - Automatically rebuilds and deploys the site whenever code is pushed to the main branch.
-- **GitHub Actions (CI/CD)**
-  - Automates tasks like linting (ESLint), formatting (Prettier), and running any tests you add.
-  - Ensures that only clean, tested code goes live.
+## Backend Technologies
 
-Together, these tools provide a reliable, scalable setup where every code change is tested and deployed quickly, with minimal manual work.
+These components handle data storage, user accounts, and the application’s “behind-the-scenes” logic.
 
-## 4. Third-Party Integrations
-While this starter kit is minimal by design, it already includes or can easily add:
+- **Next.js API Routes**  
+  Lets us write server code (APIs) right alongside our frontend pages. This co-location reduces confusion about where to put business logic.
 
-- **bcrypt**
-  - For secure password hashing (included as an npm dependency).
-- **NextAuth.js** (optional)
-  - A full-featured authentication library supporting email/password, OAuth, and more.
-- **Sentry or LogRocket** (optional)
-  - For real-time error tracking and performance monitoring in production.
+- **Better Auth**  
+  A complete authentication system that covers user registration, login, password hashing, and session management. Instead of building this from scratch, we rely on a trusted library.
 
-These integrations help extend the app’s capabilities without building every feature from scratch.
+- **PostgreSQL**  
+  A reliable, open-source database for storing user information and other data. It safely handles large amounts of information.
 
-## 5. Security and Performance Considerations
-We’ve baked in several measures to keep users safe and the app running smoothly:
+- **Drizzle ORM**  
+  A type-safe tool for talking to PostgreSQL. It translates your code into database queries, preventing many common mistakes (like typos in column names).
 
-Security:
-- Passwords are never stored in plain text—bcrypt hashes them with a random salt.
-- API routes can implement CSRF protection and input validation to block malicious requests.
-- Session tokens or cookies are marked secure and HttpOnly to prevent theft via JavaScript.
+- **TypeScript (Backend)**  
+  TypeScript runs on the backend as well, offering the same error-checking benefits for server code.
 
-Performance:
-- Server-side rendering (SSR) and static site generation (SSG) in Next.js deliver pages faster.
-- Code splitting and lazy-loaded components ensure users only download what they need.
-- Global CSS and theme files are small and cached by the browser for quick repeat visits.
+These backend tools work together to keep data secure, reliable, and easy to evolve—whether you’re a human developer or an AI assistant making updates.
 
-These strategies work together to give users a fast, secure experience every time.
+## Infrastructure and Deployment
 
-## 6. Conclusion and Overall Tech Stack Summary
-In building **codeguide-starter**, we chose technologies that:
+How we set up, version, and deliver the application so it runs reliably everywhere.
 
-- Align with modern web standards (Next.js, React, TypeScript).
-- Provide a clear, file-based project structure for rapid onboarding.
-- Offer built-in support for server-side rendering, API routes, and static assets.
-- Emphasize security through password hashing, session management, and safe defaults.
-- Enable easy scaling and future enhancements via modular code and optional integrations.
+- **Docker & docker-compose**  
+  Encapsulates the entire application (web server, database) in separate containers. This ensures everyone—on desktop or in Termux—runs the same environment.
 
-This stack strikes a balance between simplicity for newcomers and flexibility for experienced teams. It accelerates development of a secure authentication flow and a polished dashboard, while leaving room to plug in databases, test suites, and advanced features as the project grows.
+- **Git (Version Control)**  
+  Tracks every change in the code so you can collaborate safely. You can host the repository on GitHub, GitLab, or a similar service.
+
+- **CI/CD (Recommended)**  
+  Automate builds, tests, and deployments using tools like GitHub Actions. This reduces manual steps and catches problems early.
+
+- **Termux Environment**  
+  Designed to work well on mobile devices via Termux (a Linux-like terminal on Android). For practical use, you can point Drizzle to a cloud-hosted PostgreSQL service (e.g., Neon or Supabase), avoiding local database setup on your phone.
+
+These choices make deployments predictable, keep your development environment consistent, and offer a clear path to full automation.
+
+## Third-Party Integrations
+
+External services or APIs that add special capabilities to the project.
+
+- **AI Coding Agents**  
+  We include a command-line script (`~/AI`) and task file (`CLAUDE.md`) that let you interact with AI models like Claude, Codex, Gemini, and Llama3. These agents can read your code, generate new features, and even write tests or validations.
+
+By integrating these AI tools, the project becomes truly AI-centric, letting you automate routine coding tasks and focus on unique features.
+
+## Security and Performance Considerations
+
+How we keep user data safe and the app running smoothly.
+
+Security Measures:
+- **Better Auth** handles password hashing and secure session cookies.
+- **Drizzle ORM** uses parameterized queries to prevent SQL injection attacks.
+- **HTTPS** is recommended in production to encrypt data in transit.
+
+Performance Optimizations:
+- **Server-Side Rendering & Static Generation** (via Next.js) speeds up page loads and improves SEO.
+- **Utility-First CSS** (Tailwind) minimizes unused styles and reduces file size.
+- **Container Caching** (Docker) makes local rebuilds faster.
+
+These steps ensure a smooth and secure experience, whether your user is on a desktop browser or a mobile Termux terminal.
+
+## Conclusion and Overall Tech Stack Summary
+
+This starter template brings together modern, well-documented, and AI-friendly technologies to give you a production-ready foundation:
+
+- A **React & Next.js** front end with **TypeScript** for reliability and speed.
+- A co-located **API** and authentication layer powered by **Better Auth**, **PostgreSQL**, and **Drizzle ORM**.
+- **Docker**-based deployment for consistent environments, with easy version control via **Git** and optional CI/CD automation.
+- Deep integration with AI coding agents (Claude, Codex, Gemini, Llama3) through a CLI script and clear task files.
+
+By combining these pieces, you get a clear, maintainable structure that both humans and AI can understand—so you can spend less time on setup and more time building the features that matter.

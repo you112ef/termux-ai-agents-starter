@@ -1,14 +1,14 @@
 flowchart TD
-  Start[Landing Page]
-  SignUpPage[Sign Up Page]
-  SignInPage[Sign In Page]
-  AuthAPI[Authentication API Endpoint]
-  DashboardPage[Dashboard Page]
-  Start -->|Select Sign Up| SignUpPage
-  Start -->|Select Sign In| SignInPage
-  SignUpPage -->|Submit Credentials| AuthAPI
-  SignInPage -->|Submit Credentials| AuthAPI
-  AuthAPI -->|Success| DashboardPage
-  AuthAPI -->|Error| SignUpPage
-  AuthAPI -->|Error| SignInPage
-  DashboardPage -->|Click Logout| Start
+    Start[Start]
+    Start --> Home[Landing Page]
+    Home --> AuthCheck{Authenticated?}
+    AuthCheck -->|No| Login[Login Page]
+    AuthCheck -->|Yes| Dashboard[Dashboard]
+    Login --> AuthProcess{Valid credentials?}
+    AuthProcess -->|No| LoginError[Show error on login page]
+    AuthProcess -->|Yes| Dashboard
+    Dashboard --> Settings[Settings Page]
+    Dashboard --> Visualization[Data Visualization]
+    Dashboard --> Management[Data Management]
+    Dashboard --> Logout[Logout]
+    Logout --> Home

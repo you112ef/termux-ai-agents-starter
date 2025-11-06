@@ -1,117 +1,96 @@
-# Project Requirements Document: codeguide-starter
-
----
+# Project Requirements Document: termux-ai-agents-starter
 
 ## 1. Project Overview
 
-The **codeguide-starter** project is a boilerplate web application that provides a ready-made foundation for any web project requiring secure user authentication and a post-login dashboard. It sets up the common building blocks—sign-up and sign-in pages, API routes to handle registration and login, and a simple dashboard interface driven by static data. By delivering this skeleton, it accelerates development time and ensures best practices are in place from day one.
+termux-ai-agents-starter is a ready-to-use full-stack web application template optimized for developers working in a command-line environment like Termux. It solves the common pain point of manually wiring up authentication, database connectivity, UI components, and deployment scripts by offering a production-grade foundation. Beyond just scaffolding code, it’s built to integrate seamlessly with AI coding agents (Claude, Codex, Gemini, Llama3), allowing those agents to read, understand, and extend the project with pinpoint accuracy.
 
-This starter kit is being built to solve the friction developers face when setting up repeated common tasks: credential handling, session management, page routing, and theming. Key objectives include: 1) delivering a fully working authentication flow (registration & login), 2) providing a gated dashboard area upon successful login, 3) establishing a clear, maintainable project structure using Next.js and TypeScript, and 4) demonstrating a clean theming approach with global and section-specific CSS. Success is measured by having an end-to-end login journey in under 200 lines of code and zero runtime type errors.
-
----
+The main goal is to accelerate feature development: instead of spending hours on initial setup, developers and their AI assistants can dive straight into building business logic, new pages, or data visualizations. Success is measured by how quickly an AI model can be given a concise instruction—like "Add a posts table to the schema"—and produce valid, type-safe code that runs without errors. This template aims for zero friction between human prompts and AI-generated output.
 
 ## 2. In-Scope vs. Out-of-Scope
 
-### In-Scope (Version 1)
-- User registration (sign-up) form with validation
-- User login (sign-in) form with validation
-- Next.js API routes under `/api/auth/route.ts` handling:
-  - Credential validation
-  - Password hashing (e.g., bcrypt)
-  - Session creation or JWT issuance
-- Protected dashboard pages under `/dashboard`:
-  - `layout.tsx` wrapping dashboard content
-  - `page.tsx` rendering static data from `data.json`
-- Global application layout in `/app/layout.tsx`
-- Basic styling via `globals.css` and `dashboard/theme.css`
-- TypeScript strict mode enabled
+**In-Scope (Version 1.0):**
+- User authentication (registration, login, session management) via Better Auth
+- Protected `/dashboard` area with example UI components
+- UI framework using shadcn/ui and Tailwind CSS v4
+- Database integration with PostgreSQL and Drizzle ORM (schema & connection)
+- CLI script (`~/AI`) for invoking AI agents against the codebase
+- Docker and docker-compose definitions for local environment blueprint
+- Task file (`CLAUDE.md`) to guide AI models on where to find tasks
 
-### Out-of-Scope (Later Phases)
-- Integration with a real database (PostgreSQL, MongoDB, etc.)
-- Advanced authentication flows (password reset, email verification, MFA)
-- Role-based access control (RBAC)
-- Multi-tenant or white-label theming
-- Unit, integration, or end-to-end testing suites
-- CI/CD pipeline and production deployment scripts
-
----
+**Out-of-Scope (Phase 2+):**
+- Automated test suite (unit, integration, e2e)
+- Continuous integration or delivery pipelines
+- Multi-tenant or role-based access beyond basic user sessions
+- Native mobile app or React Native wrapper
+- Real-time collaboration or WebSocket features
+- Analytics dashboards, BI integrations, or advanced charting libraries
 
 ## 3. User Flow
 
-A new visitor lands on the root URL and sees a welcome page with options to **Sign Up** or **Sign In**. If they choose Sign Up, they fill in their email, password, and hit “Create Account.” The form submits to `/api/auth/route.ts`, which hashes the password, creates a new user session or token, and redirects them to the dashboard. If any input is invalid, an inline error message explains the issue (e.g., “Password too short”).
+When a developer starts from scratch, they clone the repo into Termux, install dependencies, and run the provided `docker-compose up` or point the Drizzle config at a cloud Postgres instance. Next, they execute the `~/AI` CLI script: this brings up a prompt where they choose an AI agent (e.g., Claude). The agent reads the `CLAUDE.md` file, scans the `/app`, `/components`, `/lib`, and `/db` directories, and awaits instructions like "Create a new page at `/app/settings/page.tsx`." The developer provides concise commands, and the agent generates type-safe TypeScript code based on the existing patterns.
 
-Once authenticated, the user is taken to the `/dashboard` route. Here they see a sidebar or header defined by `dashboard/layout.tsx`, and the main panel pulls in static data from `data.json`. They can log out (if that control is present), but otherwise their entire session is managed by server-side cookies or tokens. Returning users go directly to Sign In, submit credentials, and upon success they land back on `/dashboard`. Any unauthorized access to `/dashboard` redirects back to Sign In.
-
----
+For end-users of the resulting application, the flow is classic: they navigate to the landing page, register for an account, and then sign in. Upon successful login, they’re redirected to `/dashboard`, where they see a set of UI cards, tables, or charts (placeholders). From here, they can click through the sidebar to visit other feature pages dynamically added by AI agents. Every page call hits a Next.js API route, which enforces session checks and reads/writes to the PostgreSQL database via Drizzle ORM.
 
 ## 4. Core Features
 
-- **Sign-Up Page (`/app/sign-up/page.tsx`)**: Form fields for email & password, client-side validation, POST to `/api/auth`.
-- **Sign-In Page (`/app/sign-in/page.tsx`)**: Form fields for email & password, client-side validation, POST to `/api/auth`.
-- **Authentication API (`/app/api/auth/route.ts`)**: Handles both registration and login based on HTTP method, integrates password hashing (bcrypt) and session or JWT logic.
-- **Global Layout (`/app/layout.tsx` + `globals.css`)**: Shared header, footer, and CSS resets across all pages.
-- **Dashboard Layout (`/app/dashboard/layout.tsx` + `dashboard/theme.css`)**: Sidebar or top nav for authenticated flows, section-specific styling.
-- **Dashboard Page (`/app/dashboard/page.tsx`)**: Reads `data.json`, renders it as cards or tables.
-- **Static Data Source (`/app/dashboard/data.json`)**: Example dataset to demo dynamic rendering.
-- **TypeScript Configuration**: `tsconfig.json` with strict mode and path aliases (if any).
-
----
+- **AI-Agent CLI Integration**: `~/AI` shell script that loads model contexts and task files for AI-driven code modifications.
+- **Authentication Module**: Registration, login, password hashing, session cookies, logout functionality (Better Auth).
+- **Protected Dashboard**: `/dashboard` route guarded by session check, with placeholder UI components from shadcn/ui.
+- **UI Component Library**: Pre-built, accessible React components styled with Tailwind CSS and shadcn/ui.
+- **Database Layer**: Drizzle ORM schema definitions in `/db`, with PostgreSQL connection configured.
+- **Next.js API Routes**: Backend endpoints co-located with pages, handling CRUD operations and validation.
+- **Containerization Blueprint**: `Dockerfile` and `docker-compose.yaml` outlining services (app, Postgres).
+- **Task Definition File**: `CLAUDE.md` describing developer goals, used as context for AI agents.
 
 ## 5. Tech Stack & Tools
 
-- **Framework**: Next.js (App Router) for file-based routing, SSR/SSG, and API routes.
-- **Language**: TypeScript for type safety.
-- **UI Library**: React 18 for component-based UI.
-- **Styling**: Plain CSS via `globals.css` (global reset) and `theme.css` (sectional styling). Can easily migrate to CSS Modules or Tailwind in the future.
-- **Backend**: Node.js runtime provided by Next.js API routes.
-- **Password Hashing**: bcrypt (npm package).
-- **Session/JWT**: NextAuth.js or custom JWT logic (to be decided in implementation).
-- **IDE & Dev Tools**: VS Code with ESLint, Prettier extensions. Optionally, Cursor.ai for AI-assisted coding.
+**Frontend:**
+- Next.js (App Router) with React 19 and TypeScript
+- Tailwind CSS v4 utility classes
+- shadcn/ui component library
 
----
+**Backend:**
+- Next.js API Routes (Node.js, TypeScript)
+- Better Auth for authentication flows
+- PostgreSQL database
+- Drizzle ORM for type-safe queries
+
+**AI & CLI:**
+- Shell-based CLI script (`~/AI`) for agent orchestration
+- Supported models: Claude, OpenAI Codex, Google Gemini, Llama3
+
+**Dev & Deployment:**
+- Docker & docker-compose for environment definition
+- Optionally connect Drizzle to cloud providers (Neon, Supabase)
+
+**Recommended IDE & Plugins:**
+- Visual Studio Code
+- Cursor or Windsurf for AI-assisted code completion
+- ESLint & Prettier for linting/formatting
 
 ## 6. Non-Functional Requirements
 
-- **Performance**: Initial page load under 200 ms on a standard broadband connection. API responses under 300 ms.
-- **Security**:
-  - HTTPS only in production.
-  - Proper CORS, CSRF protection for API routes.
-  - Secure password storage (bcrypt with salt).
-  - No credentials or secrets checked into version control.
-- **Scalability**: Structure must support adding database integration, caching layers, and advanced auth flows without rewiring core app.
-- **Usability**: Forms should give real-time feedback on invalid input. Layout must be responsive (mobile > 320 px).
-- **Maintainability**: Code must adhere to TypeScript strict mode. Linting & formatting enforced by ESLint/Prettier.
-
----
+- **Performance:** API endpoints should respond within 200ms under normal load; initial page hydration under 2s.
+- **Security:** HTTPS enforced in production; implement CSP, XSS/CSRF protections; server-side input validation (Zod or similar).
+- **Scalability:** Stateless API routes; database indexing on key fields; easy horizontal scaling.
+- **Usability:** Accessible components (ARIA, keyboard nav); responsive design across mobile and desktop.
+- **Maintainability:** Strict TypeScript types; modular directories; clear naming conventions.
 
 ## 7. Constraints & Assumptions
 
-- **No Database**: Dashboard uses only `data.json`; real database integration is deferred.
-- **Node Version**: Requires Node.js >= 14.
-- **Next.js Version**: Built on Next.js 13+ App Router.
-- **Authentication**: Assumes availability of bcrypt or NextAuth.js at implementation time.
-- **Hosting**: Targets serverless or Node.js-capable hosting (e.g., Vercel, Netlify).
-- **Browser Support**: Modern evergreen browsers; no IE11 support required.
-
----
+- **Termux Environment:** Users have Android Termux with Node 18+ and basic Linux tooling installed.
+- **Docker in Termux:** Full Docker may not run—assume developers will point to a remote Postgres instance instead.
+- **AI Model Availability:** Access to Claude, Codex, Gemini, or Llama3 with sufficient API rate limits.
+- **Cloud DB Credentials:** Developers will supply environment variables for remote database connections.
 
 ## 8. Known Issues & Potential Pitfalls
 
-- **Static Data Limitation**: `data.json` is only for demo. A real API or database will be needed to avoid stale data.
-  *Mitigation*: Define a clear interface for data fetching so swapping to a live endpoint is trivial.
-
-- **Global CSS Conflicts**: Using global styles can lead to unintended overrides.
-  *Mitigation*: Plan to migrate to CSS Modules or utility-first CSS in Phase 2.
-
-- **API Route Ambiguity**: Single `/api/auth/route.ts` handling both sign-up and sign-in could get complex.
-  *Mitigation*: Clearly branch on HTTP method (`POST /register` vs. `POST /login`) or split into separate files.
-
-- **Lack of Testing**: No test suite means regressions can slip in.
-  *Mitigation*: Build a minimal Jest + React Testing Library setup in an early iteration.
-
-- **Error Handling Gaps**: Client and server must handle edge cases (network failures, malformed input).
-  *Mitigation*: Define a standard error response schema and show user-friendly messages.
+- **Docker on Android:** Docker-compose often fails in Termux; mitigate by using a cloud-hosted database and running `npm run dev` directly.
+- **API Rate Limits:** Hitting AI model quotas may slow the CLI workflow; consider caching task files or bundling requests.
+- **Schema Drift:** Without migration tooling (drizzle-kit), schema changes might desync. Mitigate by adding `drizzle-kit` in a later phase.
+- **Component Overload:** Too many UI components can confuse AI agents—keep new components well-documented in JSDoc.
+- **Type Safety Gaps:** If AI injects untyped code, the build may break. Always run `npm run build` in CI before merging.
 
 ---
 
-This PRD should serve as the single source of truth for the AI model or any developer generating the next set of technical documents: Tech Stack Doc, Frontend Guidelines, Backend Structure, App Flow, File Structure, and IDE Rules. It contains all functional and non-functional requirements with no ambiguity, enabling seamless downstream development.
+This document provides the single source of truth for all AI-driven and manual development work. Every subsequent technical guideline (Tech Stack docs, Frontend Guidelines, Backend Structure) should directly reference these sections to avoid ambiguity.
